@@ -36,21 +36,20 @@ class DrugcombdbSyndrugcombFda(NamedTuple):
     ID: str
     Drug1: str
     Drug2: str
-    Machenism: str
-    Source: str
+    PubmedID: int
     
 
 class DrugcombdbSyndrugcombTextmining(NamedTuple):
     Drug1: str
     Drug2: str
     Target : str
-    Source : str
+    PubmedID : int
     
 
 class DrugcombdbExternalSynergy(NamedTuple):
     Drug1: str
     Drug2: str
-    PubmedID : str
+    PubmedID : int
     
 
 class DrugcombdbExternalAntagonism(NamedTuple):
@@ -133,6 +132,9 @@ def drugcombdb_syndrugcomb_fda() -> list[tuple]:
     
     for l in contents:
         l = [None if not i else i for i in l]
+        l = [None if "NULL" in str(i) else i for i in l]
+        l = [str(i).strip() for i in l]
+        l = l[:3] + l[4:]
         if l and len(l) == len(DrugcombdbSyndrugcombFda._fields):
             result.add(DrugcombdbSyndrugcombFda(*l))
             
